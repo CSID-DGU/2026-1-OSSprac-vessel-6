@@ -3,49 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>학생 정보 입력</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-        }
-        .person-block {
-            margin-bottom: 15px;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            background-color: #f9f9f9;
-        }
-    </style>
+    <title>팀원 정보 입력</title>
+    <link rel = "stylesheet" href = "../static/css/style.css">
 </head>
 <body>
-    <h1>학생 정보 입력</h1>
+    <h1>팀원 정보 입력</h1>
     <form action="/result" method="POST" id="studentForm">
         <div id="personContainer">
             <div class="person-block">
                 <p>이름: <input type="text" name="name[]" required></p>
+                <p>학과: <input type = "text" name = "Department[]" required></p>
                 <p>학번: <input type="text" name="StudentNumber[]" required></p>
+                <p>전화번호: 
+                    <input type="text" name="phone[]" class="phone-input" placeholder="010-1234-5678" maxlength="13">
+                    <small class="text-muted masking-notice"></small>
+                </p>
+                <p>이메일: 
+                    <input type="text" name="mail[]" class="mail-input" placeholder="abc@gmail.com">
+                    <small class="text-muted masking-notice"></small>
+                </p>
             </div>
         </div>
         <button type="button" onclick="addPerson()">추가</button>
         <button type="submit">제출</button>
     </form>
-
-    <script>
-        // 새 입력 필드를 추가하는 함수
-        function addPerson() {
-            const container = document.getElementById("personContainer");
-
-            // 새로운 사람 정보를 위한 입력 블록 생성
-            const personBlock = document.createElement("div");
-            personBlock.className = "person-block";
-            personBlock.innerHTML = `
-                <p>이름: <input type="text" name="name[]" required></p>
-                <p>학번: <input type="text" name="StudentNumber[]" required></p>
-            `;
-
-            // 입력 블록을 personContainer에 추가
-            container.appendChild(personBlock);
-        }
-    </script>
+    <script src = "../static/js/theme.js"></script>
 </body>
 </html>

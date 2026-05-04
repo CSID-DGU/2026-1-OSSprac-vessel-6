@@ -1,0 +1,10 @@
+body {
+    font-family: Arial, sans-serif;
+}
+.person-block {
+    margin-bottom: 15px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+}
