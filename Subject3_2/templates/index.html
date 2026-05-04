@@ -3,53 +3,122 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"> -->
-    <title>학생 정보 출력</title>
+    <title>팀 프로젝트 메인</title>
+
     <style>
-        .container {
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #eef3fa, #cfdced);
+            color: #222;
+        }
+
+        .main-container {
+            min-height: 100vh;
             display: flex;
             justify-content: center;
-            gap: 20px;
-            padding: 20px;
+            align-items: center;
+            padding: 30px;
+            box-sizing: border-box;
         }
-        .student-block {
-            background-color: #f9f9f9;
-            padding: 15px;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            width: 200px;
+
+        .main-card {
+            width: 700px;
+            background-color: white;
+            border-radius: 20px;
+            padding: 45px 35px;
             text-align: center;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
         }
-        h1, h3, h5 {
-            text-align: center;
+
+        .badge {
+            display: inline-block;
+            padding: 8px 16px;
+            background-color: #eef3ff;
+            color: #5b7cff;
+            border-radius: 20px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            font-size: 34px;
+            margin-bottom: 15px;
+        }
+
+        .description {
+            font-size: 17px;
+            color: #555;
+            line-height: 1.7;
+            margin-bottom: 35px;
+        }
+
+        .info-box {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 35px;
+            flex-wrap: wrap;
+        }
+
+        .info-item {
+            background-color: #f6f8fc;
+            border-radius: 14px;
+            padding: 18px 22px;
+            min-width: 150px;
+            font-weight: bold;
+            color: #444;
+        }
+
+        .start-btn {
+            display: inline-block;
+            padding: 15px 35px;
+            background-color: #5b7cff;
+            color: white;
+            text-decoration: none;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: bold;
+            transition: 0.2s;
+        }
+
+        .start-btn:hover {
+            background-color: #3f63f0;
+            transform: translateY(-2px);
+        }
+
+        footer {
+            margin-top: 30px;
+            color: #888;
+            font-size: 14px;
         }
     </style>
-    <script>
-        function showContactInfo() {
-            alert("긴급전화: 010-1234-5678");
-        }
-        function openContactPage() {
-            window.open("/contact", "contactPage", "width=600,height=400");
-        }
-        function openInputPage() {
-            window.open("/input", "InputPage", "width=800,height=600");
-        }
-    </script>
 </head>
+
 <body>
-    <h1>학생 정보 출력</h1>
-    <div class="container">
-        <div class="student-block">
-            <p><strong>이름:</strong> </p>
-            <p><strong>학번:</strong> </p>
-        </div>        
+    <div class="main-container">
+        <div class="main-card">
+            <div class="badge">2026 OSSPrac Team Project</div>
+
+            <h1>팀원 정보 관리 시스템</h1>
+
+            <p class="description">
+                팀원의 이름, 학과, 학번, 연락처, 이메일과 기술 스택을 입력하고<br>
+                제출된 정보를 결과 페이지에서 확인할 수 있는 웹 페이지입니다.
+            </p>
+
+            <div class="info-box">
+                <div class="info-item">📋 정보 입력</div>
+                <div class="info-item">🛠 기술 스택 선택</div>
+                <div class="info-item">👥 팀원 관리</div>
+            </div>
+
+            <a href="/input" class="start-btn">팀원 정보 입력하기</a>
+
+            <footer>
+                Flask 기반 팀 프로젝트 메인 페이지
+            </footer>
+        </div>
     </div>
-    <h3> 팀 구성원 정보 입력 페이지 <button onclick="openInputPage()"> 이동 </button> </h3>
-    <footer>
-        <h5>📞 안내: <button onclick="showContactInfo()"> 팀 긴급연락</button> 
-            <button onclick="openContactPage()"> 팀 연락정보</button> </h5>
-    </footer>
 </body>
 </html>
-

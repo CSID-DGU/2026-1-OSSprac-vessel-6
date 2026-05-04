@@ -1,13 +1,22 @@
 from flask import Flask, render_template, request
 
 app = Flask(__name__)
-
+'''
+index -> input -> result 순서로 진행하기 위해 기존 코드를 주석처리 하였습니다.
 @app.route('/')
 def input_page():
     # 사용자가 작성한 input.html 파일을 렌더링합니다.
     return render_template('input.html')
+'''
+@app.route('/') # 1. index
+def main():
+    return render_template('index.html')
 
-@app.route('/result', methods=['POST'])
+@app.route('/input') # 2. input
+def input_page():
+    return render_template('input.html')
+
+@app.route('/result', methods=['POST']) # 3. result
 def result():
     # 1. 일반 필드 리스트 가져오기
     names = request.form.getlist('name[]')
