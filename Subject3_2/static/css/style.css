@@ -1,10 +1,88 @@
-body {
-    font-family: Arial, sans-serif;
+/* 기본 배경 설정 */
+h1 {
+    font-family : sans-serif;
+    text-align : center;
 }
+body {
+    font-family: 'Pretendard', Arial, sans-serif;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); /* 부드러운 그라데이션 */
+    min-height: 100vh;
+    padding: 20px;
+    color: #333;
+}
+
+/* 입력 블록 (유리창 느낌) */
 .person-block {
-    margin-bottom: 15px;
+    margin-bottom: 20px;
+    padding: 20px;
+    border: none;
+    border-radius: 15px;
+    background: rgba(255, 255, 255, 0.7); /* 반투명 흰색 */
+    backdrop-filter: blur(10px); /* 뒤 배경 흐리게 (유리 효과) */
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15); /* 은은한 그림자 */
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    transition: transform 0.3s ease; /* 마우스 올렸을 때 애니메이션 */
+}
+
+.person-block:hover {
+    transform: translateY(-5px); /* 살짝 떠오르는 효과 */
+}
+
+/* 입력창(input) 스타일 */
+input[type="text"],
+input[type="email"],
+select {
+    width: 100%;
     padding: 10px;
-    border: 1px solid #ccc;
+    margin-top: 8px;
+    margin-bottom: 5px;
+    border: 2px solid #ddd;
     border-radius: 8px;
-    background-color: #f9f9f9;
+    transition: all 0.3s ease;
+    outline: none;
+    box-sizing: border-box; /* 패딩이 박스 크기를 벗어나지 않게 */
+}
+
+/* 입력창 클릭(Focus) 시 효과 */
+input:focus, select:focus {
+    border-color: #667eea;
+    box-shadow: 0 0 8px rgba(102, 126, 234, 0.5);
+    background-color: #fff;
+}
+
+/* 버튼 스타일링 */
+button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: 0.2s;
+    margin-right: 10px;
+}
+
+/* 추가 버튼 */
+button[onclick="addPerson()"] {
+    background-color: #667eea;
+    color: white;
+}
+
+button[onclick="addPerson()"]:hover {
+    background-color: #764ba2;
+}
+
+/* 제출 버튼 */
+button[type="submit"] {
+    background-color: #4facfe;
+    color: white;
+}
+
+button[type="submit"]:hover {
+    background-color: #00f2fe;
+}
+
+/* 마스킹 글자 강조 (작은 글씨) */
+.text-muted {
+    font-size: 0.85rem;
+    color: #6c757d;
 }
