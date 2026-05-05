@@ -61,6 +61,15 @@
                             <input type="checkbox" name="tech_stack[0][]" value="Security" style="display:none;">
                             <span class="tech-label" style="--tech-color: #FF0000">Security</span>
                         </label>
+                        <!-- 기타 스택 추가 -->
+                        <label class="tech-chip">
+                            <input type="checkbox" name="tech_stack[0][]" value="etc" style="display:none;" onchange="toggleEtcInput(this)">
+                            <span class="tech-label" style="--tech-color: #607d8b">기타</span>
+                        </label>
+                    </div>
+                    <!-- 기타 입력창 (처음에는 숨김) -->
+                    <div class="etc-input-container" style="display:none; margin-top:10px;">
+                        <input type="text" name="etc_stack[]" placeholder="기타 기술 스택 입력 (쉼표로 구분)" style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 5px;">
                     </div>
                 </div>
             </div>

@@ -37,6 +37,14 @@ def result():
         # 기술 스택은 tech_stack[0][], tech_stack[1][] 형태로 들어오므로 인덱스로 접근
         techs = request.form.getlist(f'tech_stack[{i}][]')
         
+        if 'etc' in techs:
+            techs.remove('etc') # 'etc'라는 글자 자체는 제거
+            etc_val = request.form.getlist('etc_stack[]')[i]
+            if etc_val:
+                # 쉼표로 구분해서 입력했을 경우를 대비해 분리하여 추가
+                etc_list = [t.strip() for t in etc_val.split(',') if t.strip()]
+                techs.extend(etc_list)
+        
         member = {
             'name': names[i],
             'dept': departments[i],
