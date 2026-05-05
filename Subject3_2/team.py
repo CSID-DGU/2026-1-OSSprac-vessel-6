@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request
 
 app = Flask(__name__)
+saved_members = []
 '''
 index -> input -> result 순서로 진행하기 위해 기존 코드를 주석처리 하였습니다.
 @app.route('/')
@@ -15,6 +16,10 @@ def main():
 @app.route('/input') # 2. input
 def input_page():
     return render_template('input.html')
+
+@app.route('/contact')
+def contact():
+    return render_template('contact.html', members=saved_members)
 
 @app.route('/result', methods=['POST']) # 3. result
 def result():
@@ -43,6 +48,7 @@ def result():
         team_members.append(member)
 
     # 3. 완성된 데이터를 result.html로 전달
+    saved_members.extend(team_members)
     return render_template('result.html', members=team_members)
 
 if __name__ == '__main__':

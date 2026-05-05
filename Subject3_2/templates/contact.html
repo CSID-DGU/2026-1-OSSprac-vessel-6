@@ -1,22 +1,195 @@
-
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>연락정보 안내</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #eef3fa, #cfdced);
+            color: #222;
+        }
+
+        .contact-container {
+            min-height: 100vh;
+            padding: 40px 20px;
+            box-sizing: border-box;
+        }
+
+        .contact-card {
+            max-width: 900px;
+            margin: 0 auto;
+            background: #fff;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+        }
+
+        .contact-header {
+            text-align: center;
+            margin-bottom: 35px;
+        }
+
+        .contact-header h1 {
+            margin-bottom: 12px;
+            font-size: 32px;
+        }
+
+        .contact-header p {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 16px;
+            margin-bottom: 35px;
+        }
+
+        .summary-item,
+        .member-card {
+            background: #f6f8fc;
+            border-radius: 14px;
+            padding: 20px;
+        }
+
+        .summary-item h2,
+        .member-card h3 {
+            margin: 0 0 10px;
+            font-size: 18px;
+        }
+
+        .summary-item p,
+        .member-card p {
+            margin: 7px 0;
+            color: #555;
+        }
+
+        .section-title {
+            margin: 35px 0 16px;
+            font-size: 24px;
+        }
+
+        .member-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 16px;
+        }
+
+        .member-card {
+            border-left: 6px solid #5b7cff;
+        }
+
+        .empty-message {
+            padding: 24px;
+            background: #f6f8fc;
+            border-radius: 14px;
+            color: #777;
+            text-align: center;
+        }
+
+        .tech-list {
+            margin-top: 12px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .tech-badge {
+            padding: 5px 10px;
+            background: #e8edff;
+            color: #4f66d8;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .button-row {
+            margin-top: 35px;
+            text-align: center;
+        }
+
+        .back-btn,
+        .input-btn {
+            display: inline-block;
+            padding: 12px 24px;
+            margin: 5px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .back-btn {
+            background: #2c3e50;
+            color: white;
+        }
+
+        .input-btn {
+            background: #5b7cff;
+            color: white;
+        }
+    </style>
 </head>
 <body>
-    <header>
-        <h1>연락정보 안내</h1>
-    </header>
-    <section>
-        <p>저희 팀에 문의해주셔서 감사합니다. 빠르고 정확하게 답변드리겠습니다.</p>
-        <h2>📞 팀 연락정보</h2>
-        <p>전화: 010-1234-5678</p>
-        <p>이메일: support@example.com</p>
-        <p>운영 시간: 평일 9:00 AM - 6:00 PM</p>
-    </section>
+    <main class="contact-container">
+        <section class="contact-card">
+            <div class="contact-header">
+                <h1>연락정보 안내</h1>
+                <p>팀원 정보 입력 페이지에서 제출된 연락처가 이곳에 함께 표시됩니다.</p>
+            </div>
+
+            <div class="summary-grid">
+                <div class="summary-item">
+                    <h2>팀장명</h2>
+                    <p>김태형</p>
+                </div>
+                <div class="summary-item">
+                    <h2>전화번호</h2>
+                    <p>010-9995-4716</p>
+                </div>
+                <div class="summary-item">
+                    <h2>이메일</h2>
+                    <p>kth978340@dgu.ac.kr</p>
+                </div>
+            </div>
+
+            <h2 class="section-title">등록된 팀원 연락처</h2>
+
+            {% if members %}
+            <div class="member-list">
+                {% for member in members %}
+                <article class="member-card">
+                    <h3>{{ member.name }}</h3>
+                    <p><strong>학과</strong> {{ member.dept }}</p>
+                    <p><strong>학번</strong> {{ member.sn }}</p>
+                    <p><strong>전화번호</strong> {{ member.phone }}</p>
+                    <p><strong>이메일</strong> {{ member.email }}</p>
+
+                    {% if member.techs %}
+                    <div class="tech-list">
+                        {% for tech in member.techs %}
+                        <span class="tech-badge"># {{ tech }}</span>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                </article>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="empty-message">
+                아직 입력된 팀원 연락처가 없습니다. 팀원 정보를 먼저 입력해 주세요.
+            </div>
+            {% endif %}
+
+            <div class="button-row">
+                <a href="/" class="back-btn">메인으로 돌아가기</a>
+                <a href="/input" class="input-btn">팀원 정보 입력하기</a>
+            </div>
+        </section>
+    </main>
 </body>
 </html>
