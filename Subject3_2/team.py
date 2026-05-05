@@ -1,31 +1,63 @@
-from flask import Flask, request, render_template
+from flask import Flask, render_template, request
 
 app = Flask(__name__)
-
-# 최초 메인 페이지를 보여주는 루트 경로
+saved_members = []
+'''
+index -> input -> result 순서로 진행하기 위해 기존 코드를 주석처리 하였습니다.
 @app.route('/')
-def index():
-    return render_template('index.html')  # 위 HTML 코드를 form.html 파일로 저장해야 합니다
+def input_page():
+    # 사용자가 작성한 input.html 파일을 렌더링합니다.
+    return render_template('input.html')
+'''
+@app.route('/') # 1. index
+def main():
+    return render_template('index.html')
 
-# 학생 정보를 입력하는 경로
-
-@app.route('/input')
-def input():
+@app.route('/input') # 2. input
+def input_page():
     return render_template('input.html')
 
-# 제출된 데이터를 처리하여 출력하는 경로
-@app.route('/result', methods=['POST'])
-def result():
-    # 각 학생의 이름과 학번 데이터를 리스트로 받음
-    names = request.form.getlist('name[]')
-    student_numbers = request.form.getlist('StudentNumber[]')
-
-    # 데이터를 템플릿으로 전달하여 출력 페이지 생성
-    return render_template('result.html', students=zip(names, student_numbers))
-
 @app.route('/contact')
-def contact_info():
-    return render_template('contact.html')
+def contact():
+    return render_template('contact.html', members=saved_members)
+
+@app.route('/result', methods=['POST']) # 3. result
+def result():
+    # 1. 일반 필드 리스트 가져오기
+    names = request.form.getlist('name[]')
+    departments = request.form.getlist('Department[]')
+    student_numbers = request.form.getlist('StudentNumber[]')
+    phones = request.form.getlist('phone[]')
+    mail_ids = request.form.getlist('mail_id[]')
+    mail_domains = request.form.getlist('mail_domain[]')
+
+    # 2. 팀원별 데이터를 딕셔너리 리스트로 재구성
+    team_members = []
+    for i in range(len(names)):
+        # 기술 스택은 tech_stack[0][], tech_stack[1][] 형태로 들어오므로 인덱스로 접근
+        techs = request.form.getlist(f'tech_stack[{i}][]')
+        
+        if 'etc' in techs:
+            techs.remove('etc') # 'etc'라는 글자 자체는 제거
+            etc_val = request.form.getlist('etc_stack[]')[i]
+            if etc_val:
+                # 쉼표로 구분해서 입력했을 경우를 대비해 분리하여 추가
+                etc_list = [t.strip() for t in etc_val.split(',') if t.strip()]
+                techs.extend(etc_list)
+        
+        member = {
+            'name': names[i],
+            'dept': departments[i],
+            'sn': student_numbers[i],
+            'phone': phones[i],
+            'email': f"{mail_ids[i]}@{mail_domains[i]}",
+            'techs': techs
+        }
+        team_members.append(member)
+
+    # 3. 완성된 데이터를 result.html로 전달
+    saved_members.extend(team_members)
+    return render_template('result.html', members=team_members)
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, port=5000)
