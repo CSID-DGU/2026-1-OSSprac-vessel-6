@@ -69,3 +69,14 @@ function addPerson() {
     
     container.appendChild(personBlock);
 }
+
+function toggleEtcInput(checkbox) {
+    // 체크박스가 포함된 tech-section 내에서 etc-input-container를 찾음
+    const container = checkbox.closest('.tech-section').querySelector('.etc-input-container');
+    if (checkbox.checked) {
+        container.style.display = 'block';
+    } else {
+        container.style.display = 'none';
+        container.querySelector('input').value = ''; // 체크 해제 시 내용 초기화
+    }
+}
