@@ -94,6 +94,23 @@ input[type="checkbox"]:checked + .tech-label {
     border-color: #667eea;
 }
 
+.btn-back {
+    background-color: #6c757d; /* 차분한 회색 */
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s;
+}
+
+.btn-back:hover {
+    background-color: #5a6268;
+}
+
+/* 기존 버튼들과의 정렬을 위해 부모 컨테이너에 flex와 gap을 주는 것이 좋습니다 */
+
 /* 입력창 클릭(Focus) 시 효과 */
 input:focus, select:focus {
     border-color: #667eea;
