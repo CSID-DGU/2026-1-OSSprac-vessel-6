@@ -1,22 +1,73 @@
-
+<!-- contact.html -->
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>연락정보 안내</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>우리 팀 연락처</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
-<body>
-    <header>
-        <h1>연락정보 안내</h1>
-    </header>
-    <section>
-        <p>저희 팀에 문의해주셔서 감사합니다. 빠르고 정확하게 답변드리겠습니다.</p>
-        <h2>📞 팀 연락정보</h2>
-        <p>전화: 010-1234-5678</p>
-        <p>이메일: support@example.com</p>
-        <p>운영 시간: 평일 9:00 AM - 6:00 PM</p>
-    </section>
+<body class="result-page">
+    <!-- contact.html -->
+<div class="container">
+    <h1 class="main-title">연락정보 안내</h1>
+    
+    <!-- 1. 팀장 섹션: 변수명 leader를 직접 사용합니다 -->
+    <h2 class="section-title">⭐ Team Leader</h2>
+    <div class="result-card leader-card">
+        <div class="card-accent-bar" style="background-color: #f1c40f;"></div>
+        <div class="card-content">
+            <h2 class="leader-name">{{ leader.name }}</h2>
+            <hr class="card-divider">
+            <p>소속: {{ leader.dept }}</p>
+            <p>연락처: {{ leader.phone }}</p>
+            <p>이메일: {{ leader.email }}</p>
+            {% if leader.description %}
+            <div class="description-box">
+                <p class="description-text"><strong>Role:</strong> {{ leader.description }}</p>
+            </div>
+            {% endif %}
+            <div class="tech-tags">
+                {% for tech in leader.techs %}
+                <span class="tag-badge"># {{ tech }}</span>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
+    <!-- 2. 팀원 섹션: members 리스트를 반복문으로 돌립니다 -->
+    <h2 class="section-title">👥 Team Members</h2>
+    <div class="card-list">
+        {% for member in members %}
+        <!-- contact.html 내 카드 구조 부분 -->
+<div class="result-card">
+    <div class="card-accent-bar"></div>
+    <div class="card-content">
+        <div class="card-header">
+            <h2 class="member-name">{{ member.name }}</h2>
+        </div>
+        <hr class="card-divider">
+        
+        <!-- 기존 정보들 -->
+        <p>소속: {{ member.dept }}</p>
+        <p>연락처: {{ member.phone }}</p>
+        <p>이메일: {{ member.email }}</p>
+
+        <!-- ⭐ 역할(Description) 추가 섹션 -->
+        {% if member.description %}
+        <div class="description-box">
+            <p class="description-text"><strong>Role:</strong> {{ member.description }}</p>
+        </div>
+        {% endif %}
+
+        <div class="tech-tags">
+            {% for tech in member.techs %}
+            <span class="tag-badge"># {{ tech }}</span>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+        {% endfor %}
+    </div>
+</div>
 </body>
 </html>
