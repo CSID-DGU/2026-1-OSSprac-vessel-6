@@ -3,53 +3,77 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}"> -->
-    <title>학생 정보 출력</title>
-    <style>
-        .container {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            padding: 20px;
-        }
-        .student-block {
-            background-color: #f9f9f9;
-            padding: 15px;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            width: 200px;
-            text-align: center;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-        }
-        h1, h3, h5 {
-            text-align: center;
-        }
-    </style>
-    <script>
-        function showContactInfo() {
-            alert("긴급전화: 010-1234-5678");
-        }
-        function openContactPage() {
-            window.open("/contact", "contactPage", "width=600,height=400");
-        }
-        function openInputPage() {
-            window.open("/input", "InputPage", "width=800,height=600");
-        }
-    </script>
+    <title>OSS Team</title>
+    <!-- 외부 라이브러리 (애니메이션, 아이콘) -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../static/css/style.css">
 </head>
+
 <body>
-    <h1>학생 정보 출력</h1>
-    <div class="container">
-        <div class="student-block">
-            <p><strong>이름:</strong> </p>
-            <p><strong>학번:</strong> </p>
-        </div>        
+   
+    <header class="navbar" data-aos="fade-down">
+    <div class="logo" style="font-weight: bold; font-size: 20px;">OSS Team 6: Vessel</div>
+    <nav class="nav-menu">
+        <a href="/">
+            <i class="fa-solid fa-house"></i>
+            <span class="menu-label">홈</span>
+        </a>
+        <a href="/input">
+            <i class="fa-solid fa-diagram-project"></i>
+            <span class="menu-label">입력</span>
+        </a>
+        <a href="/contact">
+            <i class="fa-solid fa-users"></i>
+            <span class="menu-label">팀원</span>
+        </a>
+        <button id="dark-mode-toggle" class="dark-btn">
+            <i class="fa-solid fa-moon"></i> <span>Dark</span>
+        </button>
+    </nav>
+</header>
+
+    <main class="hero-section">
+    <!-- 왼쪽: 텍스트 설명 구역 업데이트 -->
+    <div class="hero-content" data-aos="fade-right" data-aos-duration="1000">
+        <div class="badge">COLLABORATION & INNOVATION</div>
+        <h1>오픈소스의 가치를 더하는<br><span>우리들의 협업 공간</span></h1>
+        <p class="description">
+            창의적인 아이디어와 기술력을 결합하여 혁신적인 웹 솔루션을 구축합니다.<br>
+            우리 팀의 여정과 성과를 지금 바로 확인해보세요.
+        </p>
+        <div class="hero-btns">
+            <a href="/input" class="start-btn primary">팀원 정보 입력하기</a>
+            <a href="/contact" class="contact-btn secondary">연락정보 보기</a>
+        </div>
     </div>
-    <h3> 팀 구성원 정보 입력 페이지 <button onclick="openInputPage()"> 이동 </button> </h3>
-    <footer>
-        <h5>📞 안내: <button onclick="showContactInfo()"> 팀 긴급연락</button> 
-            <button onclick="openContactPage()"> 팀 연락정보</button> </h5>
-    </footer>
+
+    <!-- 오른쪽: 협업 관련 이미지로 교체 -->
+    <div class="hero-visual" data-aos="fade-left" data-aos-duration="1000">
+        <div class="image-container">
+            <!-- Unsplash의 고해상도 협업 이미지 사용 -->
+            <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=800&q=80" 
+                 alt="Team Collaboration" 
+                 class="main-collab-img">
+            </div>
+        </div>
+    </div>
+</main>
+
+    <!-- AOS & 다크모드 스크립트 -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        // AOS 초기화
+        AOS.init({ once: true });
+
+        // 다크모드 로직
+        const toggleBtn = document.getElementById('dark-mode-toggle');
+        toggleBtn.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            const isDark = document.body.classList.contains('dark-mode');
+            toggleBtn.querySelector('span').textContent = isDark ? 'Light' : 'Dark';
+            toggleBtn.querySelector('i').className = isDark ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
+        });
+    </script>
 </body>
 </html>
-
