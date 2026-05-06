@@ -56,7 +56,9 @@ def result():
         team_members.append(member)
 
     # 3. 완성된 데이터를 result.html로 전달
+
     saved_members.extend(team_members)
+
     return render_template('result.html', members=team_members)
 
 if __name__ == '__main__':

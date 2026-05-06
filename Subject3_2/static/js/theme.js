@@ -69,6 +69,11 @@ function addPerson() {
     
     container.appendChild(personBlock);
 }
+function goBack() {
+    if (confirm("입력 중인 정보가 사라질 수 있습니다. 메인 화면으로 돌아가시겠습니까?")) {
+        location.href = '/';
+    }
+}
 
 function toggleEtcInput(checkbox) {
     // 체크박스가 포함된 tech-section 내에서 etc-input-container를 찾음
