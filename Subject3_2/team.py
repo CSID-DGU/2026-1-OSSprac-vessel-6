@@ -17,6 +17,7 @@ def main():
 def input_page():
     return render_template('input.html')
 
+<<<<<<< HEAD
 added_members = []
 
 @app.route('/contact')
@@ -63,6 +64,11 @@ def contact_page():
     all_members = default_members + added_members
 
     return render_template('contact.html', leader=team_leader, members=all_members)
+=======
+@app.route('/contact')
+def contact():
+    return render_template('contact.html', members=saved_members)
+>>>>>>> 185543ea096816ce8496fd7636742deec5219cf0
 
 @app.route('/result', methods=['POST']) # 3. result
 def result():
@@ -99,7 +105,11 @@ def result():
         team_members.append(member)
 
     # 3. 완성된 데이터를 result.html로 전달
+<<<<<<< HEAD
     added_members.extend(team_members)
+=======
+    saved_members.extend(team_members)
+>>>>>>> 185543ea096816ce8496fd7636742deec5219cf0
     return render_template('result.html', members=team_members)
 
 if __name__ == '__main__':

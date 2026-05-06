@@ -232,6 +232,7 @@ input[type="checkbox"]:checked + .tech-label {
     margin-top: 40px;
 }
 
+<<<<<<< HEAD
 /* 팀원 카드 스타일 */
 .member-card {
     background: var(--card-bg);
@@ -241,6 +242,30 @@ input[type="checkbox"]:checked + .tech-label {
     box-shadow: 0 10px 30px rgba(0,0,0,0.05);
     transition: all 0.3s ease;
     border: 1px solid rgba(0,0,0,0.05);
+=======
+.btn-back {
+    background-color: #6c757d; /* 차분한 회색 */
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s;
+}
+
+.btn-back:hover {
+    background-color: #5a6268;
+}
+
+/* 기존 버튼들과의 정렬을 위해 부모 컨테이너에 flex와 gap을 주는 것이 좋습니다 */
+
+/* 입력창 클릭(Focus) 시 효과 */
+input:focus, select:focus {
+    border-color: #667eea;
+    box-shadow: 0 0 8px rgba(102, 126, 234, 0.5);
+    background-color: #fff;
+>>>>>>> 185543ea096816ce8496fd7636742deec5219cf0
 }
 
 .member-card:hover {
