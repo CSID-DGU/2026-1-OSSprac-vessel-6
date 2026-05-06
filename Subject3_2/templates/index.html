@@ -3,6 +3,80 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OSS Team</title>
+    <!-- 외부 라이브러리 (애니메이션, 아이콘) -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="../static/css/style.css">
+</head>
+
+<body>
+   
+    <header class="navbar" data-aos="fade-down">
+    <div class="logo" style="font-weight: bold; font-size: 20px;">OSS Team 6: Vessel</div>
+    <nav class="nav-menu">
+        <a href="/">
+            <i class="fa-solid fa-house"></i>
+            <span class="menu-label">홈</span>
+        </a>
+        <a href="/input">
+            <i class="fa-solid fa-diagram-project"></i>
+            <span class="menu-label">입력</span>
+        </a>
+        <a href="/contact">
+            <i class="fa-solid fa-users"></i>
+            <span class="menu-label">팀원</span>
+        </a>
+        <button id="dark-mode-toggle" class="dark-btn">
+            <i class="fa-solid fa-moon"></i> <span>Dark</span>
+        </button>
+    </nav>
+</header>
+
+    <main class="hero-section">
+    <!-- 왼쪽: 텍스트 설명 구역 업데이트 -->
+    <div class="hero-content" data-aos="fade-right" data-aos-duration="1000">
+        <div class="badge">COLLABORATION & INNOVATION</div>
+        <h1>오픈소스의 가치를 더하는<br><span>우리들의 협업 공간</span></h1>
+        <p class="description">
+            창의적인 아이디어와 기술력을 결합하여 혁신적인 웹 솔루션을 구축합니다.<br>
+            우리 팀의 여정과 성과를 지금 바로 확인해보세요.
+        </p>
+        <div class="hero-btns">
+            <a href="/input" class="start-btn primary">팀원 정보 입력하기</a>
+            <a href="/contact" class="contact-btn secondary">연락정보 보기</a>
+        </div>
+    </div>
+
+    <!-- 오른쪽: 협업 관련 이미지로 교체 -->
+    <div class="hero-visual" data-aos="fade-left" data-aos-duration="1000">
+        <div class="image-container">
+            <!-- Unsplash의 고해상도 협업 이미지 사용 -->
+            <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=800&q=80" 
+                 alt="Team Collaboration" 
+                 class="main-collab-img">
+            </div>
+        </div>
+    </div>
+</main>
+
+    <!-- AOS & 다크모드 스크립트 -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        // AOS 초기화
+        AOS.init({ once: true });
+
+        // 다크모드 로직
+        const toggleBtn = document.getElementById('dark-mode-toggle');
+        toggleBtn.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            const isDark = document.body.classList.contains('dark-mode');
+            toggleBtn.querySelector('span').textContent = isDark ? 'Light' : 'Dark';
+            toggleBtn.querySelector('i').className = isDark ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
+        });
+    </script>
+</body>
+</html>
     <title>팀 프로젝트 메인</title>
 
     <style>
