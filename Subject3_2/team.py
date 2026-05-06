@@ -17,58 +17,9 @@ def main():
 def input_page():
     return render_template('input.html')
 
-<<<<<<< HEAD
-added_members = []
-
-@app.route('/contact')
-def contact_page():
-    # 1. 고정된 팀장 정보
-    team_leader = {
-        "name": "김태형",
-        "dept": "통계학과",
-        "phone": "010-9995-1234",
-        "email": "teahyung@gmail.com",
-        "techs": ["Python", "Flask", "R", "GitHub","JAVA","SAS","Linux"],
-        "description": "result.html 담당,  input에 입력한 정보를 출력하는 result 페이지를 구현하였음. 웹사이트를 구현하는 과정에서 팀원들이 업로드한 html 파일들을 수정하는 등 웹사이트를 최종적으로 검토하였음."
-    }
-
-    # 2. 처음부터 들어있는 고정 팀원 정보
-    default_members = [
-        {
-            "name": "권민재",
-            "dept": "정보통신공학과",
-            "phone": "010-6292-1234",
-            "email": "minjae1234@gmail.com",
-            "techs": ["C++", "JAVA","Linux"],
-            "description": "input.html 담당, 이름,학과,학번,전화번호,이메일,기술스택 입력칸을 구현하였음. 기술스택 입력칸은 기타를 선택할 경우 텍스트 입력칸이 나타나도록 구현하였음. 또한 style.css, theme.js도 같이 구현하였음."
-        },
-        {
-            "name": "김종헌",
-            "dept": "정보통신공학과",
-            "phone": "010-2657-9037",
-            "email": "jongheon371@gmail.com",
-            "techs": ["C++", "Python"],
-            "description": "contact.html 담당, 팀원들의 정보를 보여주는 contact.html을 구현하였음. 이 과정에서 style.css, theme.js도 같이 구현하였음."
-        },
-        {
-            "name": "이영민",
-            "dept": "건축학과",
-            "phone": "010-8838-0140",
-            "email": "lymin0106@gmail.com",
-            "techs": ["Python", "JAVA"],
-            "description": "index.html 담당, 팀의 소개와 프로젝트의 개요를 담은 index.html을 구현하였음. AOS 라이브러리를 활용하여 애니메이션 효과를 추가하였고, 다크모드도 구현하였음. 또한 style.css, theme.js도 같이 구현하였음."
-        }
-    ]
-
-    # 고정 팀원과 input으로 추가된 팀원을 합칩니다.
-    all_members = default_members + added_members
-
-    return render_template('contact.html', leader=team_leader, members=all_members)
-=======
 @app.route('/contact')
 def contact():
     return render_template('contact.html', members=saved_members)
->>>>>>> 185543ea096816ce8496fd7636742deec5219cf0
 
 @app.route('/result', methods=['POST']) # 3. result
 def result():
@@ -105,11 +56,9 @@ def result():
         team_members.append(member)
 
     # 3. 완성된 데이터를 result.html로 전달
-<<<<<<< HEAD
-    added_members.extend(team_members)
-=======
+
     saved_members.extend(team_members)
->>>>>>> 185543ea096816ce8496fd7636742deec5219cf0
+
     return render_template('result.html', members=team_members)
 
 if __name__ == '__main__':
