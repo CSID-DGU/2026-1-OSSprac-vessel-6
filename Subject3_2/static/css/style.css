@@ -148,3 +148,21 @@ button[type="submit"] {
 button[type="submit"]:hover {
     background-color: #00f2fe;
 }
+
+/* --- 다크모드 시 로고 글자색 변경 --- */
+
+/* 1. 기본 상태 로고 색상 (필요 시 수정) */
+.navbar .logo {
+    color: #333333;
+    transition: color 0.3s ease;
+}
+
+/* 2. 다크모드 활성화 시 로고 색상을 흰색으로 강제 변경 */
+body.dark-mode .navbar .logo {
+    color: #ffffff !important;
+}
+
+/* 3. (추가 팁) 다크모드 시 내비게이션 메뉴 아이콘과 글자도 흰색으로 */
+body.dark-mode .nav-menu a {
+    color: #ffffff !important;
+}
