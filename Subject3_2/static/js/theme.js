@@ -22,6 +22,9 @@ function addPerson() {
     const container = document.getElementById("personContainer");
     if (!container) return;
 
+    // 현재 몇 번째 팀원인지 계산 (서버 전달 인덱스 관리용)
+    const personCount = container.getElementsByClassName("person-block").length;
+
     const personBlock = document.createElement("div");
     personBlock.className = "person-block";
     
@@ -36,10 +39,17 @@ function addPerson() {
 
     let techHtml = techStacks.map(tech => `
         <label class="tech-chip">
-            <input type="checkbox" name="tech_stack[]" value="${tech.name}" style="display:none;">
+            <input type="checkbox" name="tech_stack[${personCount}][]" value="${tech.name}" style="display:none;">
             <span class="tech-label" style="--tech-color: ${tech.color}">${tech.name}</span>
         </label>
     `).join("");
+
+    techHtml += `
+        <label class="tech-chip">
+            <input type="checkbox" name="tech_stack[${personCount}][]" value="etc" style="display:none;" onchange="toggleEtcInput(this)">
+            <span class="tech-label" style="--tech-color: #607d8b">기타</span>
+        </label>
+    `;
 
     personBlock.innerHTML = `
         <p>이름: <input type="text" name="name[]" required></p>
@@ -64,17 +74,29 @@ function addPerson() {
         <div class="tech-section">
             <p style="font-weight:bold; margin-bottom: 10px;">🛠 기술 스택</p>
             <div class="tech-grid">${techHtml}</div>
+
+            <div class="etc-input-container" style="display:none; margin-top:10px;">
+                <input type="text" name="etc_stack[${personCount}]" placeholder="기타 기술 스택 입력 (쉼표로 구분)" 
+                    style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 5px;">
+            </div>
         </div>
     `;
     
     container.appendChild(personBlock);
 }
+function goBack() {
+    if (confirm("입력 중인 정보가 사라질 수 있습니다. 메인 화면으로 돌아가시겠습니까?")) {
+        location.href = '/';
+    }
+}
 
 function toggleEtcInput(checkbox) {
     // 체크박스가 포함된 tech-section 내에서 etc-input-container를 찾음
-    const container = checkbox.closest('.tech-section').querySelector('.etc-input-container');
+    const techSection = checkbox.closest('.tech-section');
+    const container = techSection.querySelector('.etc-input-container');
     if (checkbox.checked) {
         container.style.display = 'block';
+        container.querySelector('input').focus();
     } else {
         container.style.display = 'none';
         container.querySelector('input').value = ''; // 체크 해제 시 내용 초기화

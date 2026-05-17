@@ -39,7 +39,7 @@ def result():
         
         if 'etc' in techs:
             techs.remove('etc') # 'etc'라는 글자 자체는 제거
-            etc_val = request.form.getlist('etc_stack[]')[i]
+            etc_val = request.form.get(f'etc_stack[{i}]')
             if etc_val:
                 # 쉼표로 구분해서 입력했을 경우를 대비해 분리하여 추가
                 etc_list = [t.strip() for t in etc_val.split(',') if t.strip()]
@@ -56,7 +56,9 @@ def result():
         team_members.append(member)
 
     # 3. 완성된 데이터를 result.html로 전달
+
     saved_members.extend(team_members)
+
     return render_template('result.html', members=team_members)
 
 if __name__ == '__main__':
