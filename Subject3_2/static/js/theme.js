@@ -51,7 +51,15 @@ function addPerson() {
         </label>
     `;
 
+
+
     personBlock.innerHTML = `
+
+        <button type="button" class="btn-remove" onclick="removePerson(this)" 
+            style="position: absolute; top: 15px; right: 15px; background: #e74c3c; color: white; border: none; border-radius: 5px; padding: 5px 10px; cursor: pointer; font-weight: bold;">
+            삭제 ×
+        </button>
+
         <p>이름: <input type="text" name="name[]" required></p>
         <p>학과: <input type="text" name="Department[]" required></p>
         <p>학번: <input type="text" name="StudentNumber[]" required></p>
@@ -84,6 +92,20 @@ function addPerson() {
     
     container.appendChild(personBlock);
 }
+
+
+// 팀원 삭제 함수 (추가된 기능)
+function removePerson(button) {
+    if (confirm("이 팀원 입력 창을 삭제하시겠습니까?")) {
+        // 버튼에서 가장 가까운 부모 .person-block을 찾아 제거합니다.
+        const personBlock = button.closest('.person-block');
+        personBlock.remove();
+        
+        // 중요: 중간 블록이 삭제되면 tech_stack[인덱스][]의 순서가 꼬일 수 있으므로 인덱스를 재정렬합니다.
+        reindexTechStacks();
+    }
+}
+
 function goBack() {
     if (confirm("입력 중인 정보가 사라질 수 있습니다. 메인 화면으로 돌아가시겠습니까?")) {
         location.href = '/';
@@ -100,5 +122,26 @@ function toggleEtcInput(checkbox) {
     } else {
         container.style.display = 'none';
         container.querySelector('input').value = ''; // 체크 해제 시 내용 초기화
+    }
+}
+
+// 기술 스택 인덱스 재정렬 함수 (추가된 기능)
+function reindexTechStacks() {
+    const container = document.getElementById("personContainer");
+    const blocks = container.getElementsByClassName("person-block");
+    
+    // 남은 블록들을 순회하며 name 속성의 숫자를 0, 1, 2... 순서대로 다시 세팅합니다.
+    for (let i = 0; i < blocks.length; i++) {
+        // 일반 기술 스택 체크박스 재정렬
+        const checkboxes = blocks[i].querySelectorAll('input[type="checkbox"]');
+        checkboxes.forEach(cb => {
+            cb.name = `tech_stack[${i}][]`;
+        });
+        
+        // 기타 기술 스택 입력창 재정렬
+        const etcInput = blocks[i].querySelector('.etc-input-container input');
+        if (etcInput) {
+            etcInput.name = `etc_stack[${i}]`;
+        }
     }
 }
