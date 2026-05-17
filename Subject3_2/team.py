@@ -39,7 +39,7 @@ def result():
         
         if 'etc' in techs:
             techs.remove('etc') # 'etc'라는 글자 자체는 제거
-            etc_val = request.form.getlist('etc_stack[]')[i]
+            etc_val = request.form.get(f'etc_stack[{i}]')
             if etc_val:
                 # 쉼표로 구분해서 입력했을 경우를 대비해 분리하여 추가
                 etc_list = [t.strip() for t in etc_val.split(',') if t.strip()]
