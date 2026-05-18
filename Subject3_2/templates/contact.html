@@ -2,194 +2,178 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>우리 팀 연락처</title>
-    <style>
-        /* 이미지와 동일한 디자인을 위한 CSS */
-        body {
-            background-color: #f8f9fc;
-            font-family: 'Pretendard', sans-serif;
-            margin: 0;
-            padding: 40px 20px;
-            color: #333;
-        }
-
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-        }
-
-        .main-title {
-            text-align: center;
-            font-size: 28px;
-            margin-bottom: 50px;
-            font-weight: bold;
-        }
-
-        .section-title {
-            font-size: 20px;
-            margin: 40px 0 20px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        /* 카드 기본 스타일 */
-        .result-card {
-            background: #fff;
-            border-radius: 15px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-            display: flex; /* 가로 배치 */
-            overflow: hidden;
-            margin-bottom: 25px;
-            transition: transform 0.2s;
-        }
-
-        /* 왼쪽 강조 바 */
-        .card-accent-bar {
-            width: 8px;
-            background-color: #3498db; /* 기본 파란색 */
-            flex-shrink: 0;
-        }
-
-        .leader-card .card-accent-bar {
-            background-color: #f1c40f; /* 팀장 노란색 */
-        }
-
-        .card-content {
-            padding: 30px;
-            flex-grow: 1;
-        }
-
-        .member-name, .leader-name {
-            margin: 0 0 15px 0;
-            font-size: 22px;
-            font-weight: bold;
-        }
-
-        .card-divider {
-            border: 0;
-            border-top: 1px solid #eee;
-            margin: 15px 0;
-        }
-
-        .card-content p {
-            margin: 8px 0;
-            font-size: 15px;
-            color: #555;
-            line-height: 1.6;
-        }
-
-        /* Role 텍스트 스타일 */
-        .description-text {
-            font-size: 15px;
-            color: #444;
-        }
-
-        /* 기술 태그 스타일 */
-        .tech-tags {
-            margin-top: 20px;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-
-        .tag-badge {
-            background-color: #eef2ff;
-            color: #5b7cff;
-            padding: 6px 14px;
-            border-radius: 20px;
-            font-size: 13px;
-            font-weight: 600;
-        }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>6조 연락처</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 </head>
-<body class="result-page">
+<body class="contact-page">
 
-<div class="container">
-    <h1 class="main-title">연락정보 안내</h1>
-    
-    <!-- 1. 팀장 섹션 -->
-    <h2 class="section-title">⭐ Team Leader</h2>
-    <div class="result-card leader-card">
-        <div class="card-accent-bar"></div>
-        <div class="card-content">
-            <h2 class="leader-name">김태형</h2>
-            <hr class="card-divider">
-            <p>소속: 통계학과</p>
-            <p>연락처: 010-9995-1234</p>
-            <p>이메일: teahyung@gmail.com</p>
-            <p class="description-text"><strong>Role:</strong> result.html 담당, input에 입력한 정보를 출력하는 result 페이지를 구현하였음. 웹사이트를 구현하는 과정에서 팀원들이 업로드한 html 파일들을 수정하는 등 웹사이트를 최종적으로 검토하였음.</p>
-            
-            <div class="tech-tags">
-                <span class="tag-badge"># Python</span>
-                <span class="tag-badge"># Flask</span>
-                <span class="tag-badge"># R</span>
-                <span class="tag-badge"># GitHub</span>
-                <span class="tag-badge"># JAVA</span>
-                <span class="tag-badge"># SAS</span>
-                <span class="tag-badge"># Linux</span>
+
+    <div class="page-shell">
+
+        <!-- 페이지 상단 소개 영역 -->
+        <section class="page-hero" data-aos="fade-up">
+            <span class="page-badge">
+                <i class="fa-solid fa-address-book"></i>
+                TEAM CONTACT
+            </span>
+
+            <h1>6조 연락정보</h1>
+
+            <p>
+                팀원들의 역할, 연락처, 기술 스택을 한눈에 확인할 수 있습니다.<br>
+                이름, 학과, 역할, 기술 스택으로 팀원을 검색하거나 필터링할 수 있습니다.
+            </p>
+        </section>
+
+        <!-- 팀 통계 카드 -->
+        <section class="team-stat-grid" data-aos="fade-up" data-aos-delay="100">
+            <div class="team-stat-card">
+                <i class="fa-solid fa-users"></i>
+                <span>Team Members</span>
+                <strong>{{ members|length }}명</strong>
             </div>
+
+            <div class="team-stat-card">
+                <i class="fa-solid fa-code"></i>
+                <span>Main Stack</span>
+                <strong>Python · Flask</strong>
+            </div>
+
+            <div class="team-stat-card">
+                <i class="fa-brands fa-docker"></i>
+                <span>Deployment</span>
+                <strong>Docker</strong>
+            </div>
+        </section>
+
+        <!-- 검색 / 필터 영역 -->
+        <section class="contact-toolbar glass-card" data-aos="fade-up" data-aos-delay="160">
+            <div class="toolbar-title">
+                <h2>팀원 검색 및 필터</h2>
+                <p>이름, 학과, 역할, 기술 스택을 기준으로 팀원을 빠르게 찾을 수 있습니다.</p>
+            </div>
+
+            <div class="toolbar">
+                <input 
+                    type="text" 
+                    id="memberSearchInput" 
+                    class="search-input" 
+                    placeholder="이름, 학과, 역할, 기술 스택으로 검색"
+                >
+
+                <div class="filter-bar">
+                    <button class="filter-btn active" type="button" data-filter="all">전체</button>
+                    <button class="filter-btn" type="button" data-filter="Python">Python</button>
+                    <button class="filter-btn" type="button" data-filter="JAVA">JAVA</button>
+                    <button class="filter-btn" type="button" data-filter="C++">C++</button>
+                    <button class="filter-btn" type="button" data-filter="Linux">Linux</button>
+                    <button class="filter-btn" type="button" data-filter="Flask">Flask</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- 팀원 카드 목록 -->
+        <section class="container contact-upgraded" data-aos="fade-up" data-aos-delay="220">
+            <div class="card-list">
+                {% for member in members %}
+                <div 
+                    class="result-card {% if member.leader %}leader-card{% endif %}" 
+                    data-member-card 
+                    data-tech="{{ member.techs | join(' ') }}"
+                >
+                    <div class="card-accent-bar"></div>
+
+                    <div class="card-content">
+                        <div class="profile-header">
+                            <div class="profile-avatar">
+                                {% if member.leader %}
+                                    <i class="fa-solid fa-crown"></i>
+                                {% else %}
+                                    <i class="fa-solid fa-user"></i>
+                                {% endif %}
+                            </div>
+
+                            <div>
+                                <h2 class="{% if member.leader %}leader-name{% else %}member-name{% endif %}">
+                                    {{ member.name }}
+                                </h2>
+
+                                {% if member.leader %}
+                                    <span class="role-badge leader-badge">Team Leader</span>
+                                {% else %}
+                                    <span class="role-badge">Team Member</span>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <hr class="card-divider">
+
+                        <div class="contact-info-list">
+                            <p>
+                                <i class="fa-solid fa-building-columns"></i>
+                                <strong>소속:</strong>
+                                {{ member.dept }}
+                            </p>
+
+                            <p>
+                                <i class="fa-solid fa-phone"></i>
+                                <strong>연락처:</strong>
+                                <a class="contact-link" href="tel:{{ member.phone | replace('-', '') }}">
+                                    {{ member.phone }}
+                                </a>
+                            </p>
+
+                            <p>
+                                <i class="fa-solid fa-envelope"></i>
+                                <strong>이메일:</strong>
+                                <a class="contact-link" href="mailto:{{ member.email }}">
+                                    {{ member.email }}
+                                </a>
+                            </p>
+                        </div>
+
+                        <p class="description-text">
+                            <strong>Role:</strong> {{ member.role }}
+                        </p>
+
+                        <div class="tech-tags">
+                            {% for tech in member.techs %}
+                            <span class="tag-badge"># {{ tech }}</span>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <div id="emptyMessage" class="empty-message">
+                검색 조건에 맞는 팀원이 없습니다.
+            </div>
+        </section>
+
+        <!-- 하단 이동 버튼 -->
+        <div class="action-row">
+            <a href="/" class="action-btn secondary">
+                <i class="fa-solid fa-house"></i>
+                메인으로
+            </a>
+
+            <a href="/input" class="action-btn primary">
+                <i class="fa-solid fa-user-plus"></i>
+                팀원 정보 입력하기
+            </a>
         </div>
+
     </div>
 
-    <!-- 2. 팀원 섹션 -->
-    <h2 class="section-title">👥 Team Members</h2>
-    <div class="card-list">
-        
-        <!-- 권민재 -->
-        <div class="result-card">
-            <div class="card-accent-bar"></div>
-            <div class="card-content">
-                <h2 class="member-name">권민재</h2>
-                <hr class="card-divider">
-                <p>소속: 정보통신공학과</p>
-                <p>연락처: 010-6292-1234</p>
-                <p>이메일: minjae1234@gmail.com</p>
-                <p class="description-text"><strong>Role:</strong> input.html 담당, 이름,학과,학번,전화번호,이메일,기술스택 입력칸을 구현하였음. 기술스택 입력칸은 기타를 선택할 경우 텍스트 입력칸이 나타나도록 구현하였음. 또한 style.css, theme.js도 같이 구현하였음.</p>
-                <div class="tech-tags">
-                    <span class="tag-badge"># C++</span>
-                    <span class="tag-badge"># JAVA</span>
-                    <span class="tag-badge"># Linux</span>
-                </div>
-            </div>
-        </div>
-
-        <!-- 김종헌 -->
-        <div class="result-card">
-            <div class="card-accent-bar"></div>
-            <div class="card-content">
-                <h2 class="member-name">김종헌</h2>
-                <hr class="card-divider">
-                <p>소속: 정보통신공학과</p>
-                <p>연락처: 010-2657-9037</p>
-                <p>이메일: jongheon371@gmail.com</p>
-                <p class="description-text"><strong>Role:</strong> contact.html 담당, 팀원들의 정보를 보여주는 contact.html을 구현하였음. 이 과정에서 style.css, theme.js도 같이 구현하였음.</p>
-                <div class="tech-tags">
-                    <span class="tag-badge"># C++</span>
-                    <span class="tag-badge"># Python</span>
-                </div>
-            </div>
-        </div>
-
-        <!-- 이영민 -->
-        <div class="result-card">
-            <div class="card-accent-bar"></div>
-            <div class="card-content">
-                <h2 class="member-name">이영민</h2>
-                <hr class="card-divider">
-                <p>소속: 건축학과</p>
-                <p>연락처: 010-8838-0140</p>
-                <p>이메일: lymin0106@gmail.com</p>
-                <p class="description-text"><strong>Role:</strong> index.html 담당, 팀의 소개와 프로젝트의 개요를 담은 index.html을 구현하였음. AOS 라이브러리를 활용하여 애니메이션 효과를 추가하였고, 다크모드도 구현하였음. 또한 style.css, theme.js도 같이 구현하였음.</p>
-                <div class="tech-tags">
-                    <span class="tag-badge"># Python</span>
-                    <span class="tag-badge"># JAVA</span>
-                </div>
-            </div>
-        </div>
-        
-    </div>
-</div>
+    <script src="{{ url_for('static', filename='js/theme.js') }}"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({ once: true });
+    </script>
 
 </body>
 </html>
