@@ -1,48 +1,152 @@
 /**
- * 1. 이메일 도메인 자동 입력 함수
+ * 공통 기능
+ * - 다크모드 상태 localStorage 저장
+ * - 팀원 검색/기술스택 필터
+ * - 입력 폼 동적 추가/삭제
+ * - 이메일 도메인 자동 입력
+ */
+
+document.addEventListener('DOMContentLoaded', () => {
+    initDarkMode();
+    initMemberSearchAndFilter();
+    initFormValidationMessage();
+});
+
+function initDarkMode() {
+    const toggleBtn = document.getElementById('dark-mode-toggle');
+    const savedTheme = localStorage.getItem('theme');
+
+    if (savedTheme === 'dark') {
+        document.body.classList.add('dark-mode');
+    }
+
+    updateDarkButton(toggleBtn);
+
+    if (toggleBtn) {
+        toggleBtn.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            const isDark = document.body.classList.contains('dark-mode');
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+            updateDarkButton(toggleBtn);
+        });
+    }
+}
+
+function updateDarkButton(toggleBtn) {
+    if (!toggleBtn) return;
+
+    const isDark = document.body.classList.contains('dark-mode');
+    const icon = toggleBtn.querySelector('i');
+    const label = toggleBtn.querySelector('span');
+
+    if (label) label.textContent = isDark ? 'Light' : 'Dark';
+    if (icon) icon.className = isDark ? 'fa-solid fa-sun' : 'fa-solid fa-moon';
+}
+
+function initMemberSearchAndFilter() {
+    const searchInput = document.getElementById('memberSearchInput');
+    const filterButtons = document.querySelectorAll('.filter-btn');
+
+    if (searchInput) {
+        searchInput.addEventListener('input', applyMemberFilters);
+    }
+
+    filterButtons.forEach((button) => {
+        button.addEventListener('click', () => {
+            filterButtons.forEach((btn) => btn.classList.remove('active'));
+            button.classList.add('active');
+            applyMemberFilters();
+        });
+    });
+
+    applyMemberFilters();
+}
+
+function applyMemberFilters() {
+    const cards = document.querySelectorAll('[data-member-card]');
+    const searchInput = document.getElementById('memberSearchInput');
+    const activeButton = document.querySelector('.filter-btn.active');
+    const emptyMessage = document.getElementById('emptyMessage');
+
+    const keyword = searchInput ? searchInput.value.trim().toLowerCase() : '';
+    const selectedTech = activeButton ? activeButton.dataset.filter.toLowerCase() : 'all';
+    let visibleCount = 0;
+
+    cards.forEach((card) => {
+        const cardText = card.innerText.toLowerCase();
+        const techs = (card.dataset.tech || '').toLowerCase();
+
+        const matchesKeyword = keyword === '' || cardText.includes(keyword);
+        const matchesTech = selectedTech === 'all' || techs.includes(selectedTech);
+        const shouldShow = matchesKeyword && matchesTech;
+
+        card.classList.toggle('hidden-card', !shouldShow);
+        if (shouldShow) visibleCount += 1;
+    });
+
+    if (emptyMessage) {
+        emptyMessage.style.display = visibleCount === 0 ? 'block' : 'none';
+    }
+}
+
+function initFormValidationMessage() {
+    const form = document.getElementById('studentForm');
+    if (!form) return;
+
+    form.addEventListener('submit', (event) => {
+        if (!form.checkValidity()) {
+            event.preventDefault();
+            alert('입력 형식을 확인해 주세요. 예: 전화번호 010-1234-5678, 학번은 숫자만 입력');
+            form.reportValidity();
+        }
+    });
+}
+
+/**
+ * 이메일 도메인 자동 입력 함수
  */
 function updateEmailDomain(selectElement) {
-    const block = selectElement.closest('.person-block'); /* 가장 가까운 부모 블록 안에서만 그러니깐 해당 학생 입력 칸 안에서만 적용 */
-    const domainInput = block.querySelector('.domain-input'); /* 도메인 입력칸 선정 */
-    
-    if (selectElement.value === "custom") {
-        domainInput.value = "";
+    const block = selectElement.closest('.person-block');
+    const domainInput = block.querySelector('.domain-input');
+
+    if (selectElement.value === 'custom') {
+        domainInput.value = '';
         domainInput.readOnly = false;
-        domainInput.focus();    /* custom을 선택하면 readonly를 풀어주고 값을 없애주며 거기로 커서 설정해줌 */
+        domainInput.placeholder = '직접 입력 예: example.com';
+        domainInput.focus();
     } else {
         domainInput.value = selectElement.value;
-        domainInput.readOnly = true;    /* 아니면 선택한 주소를 입력칸에 넣어주고 다시 readonly로 잠금 */
+        domainInput.readOnly = true;
     }
 }
 
 /**
- * 2. 팀원 추가 함수 (기술 스택 로고 포함)
+ * 팀원 입력 블록 추가 함수
  */
 function addPerson() {
-    const container = document.getElementById("personContainer");
+    const container = document.getElementById('personContainer');
     if (!container) return;
 
-    // 현재 몇 번째 팀원인지 계산 (서버 전달 인덱스 관리용)
-    const personCount = container.getElementsByClassName("person-block").length;
+    const personCount = container.getElementsByClassName('person-block').length;
+    const personBlock = document.createElement('div');
+    personBlock.className = 'person-block';
 
-    const personBlock = document.createElement("div");
-    personBlock.className = "person-block";
-    
-    // 기술 스택 데이터 (무료 아이콘 사이트인 Simple Icons 등을 활용 가능)
     const techStacks = [
-        { name: "C++", color: "#00599C" },
-        { name: "Python", color: "#3776AB" },
-        { name: "Linux", color: "#FCC624" },
-        { name: "Git", color: "#F05032" },
-        { name: "Security", color: "#FF0000" }
+        { name: 'C++', color: '#00599C' },
+        { name: 'Python', color: '#3776AB' },
+        { name: 'Linux', color: '#FCC624' },
+        { name: 'Git', color: '#F05032' },
+        { name: 'Security', color: '#FF0000' },
+        { name: 'JAVA', color: '#f89820' },
+        { name: 'Flask', color: '#111111' }
     ];
 
-    let techHtml = techStacks.map(tech => `
+    let techHtml = techStacks.map((tech) => `
         <label class="tech-chip">
             <input type="checkbox" name="tech_stack[${personCount}][]" value="${tech.name}" style="display:none;">
             <span class="tech-label" style="--tech-color: ${tech.color}">${tech.name}</span>
         </label>
-    `).join("");
+    `).join('');
 
     techHtml += `
         <label class="tech-chip">
@@ -51,26 +155,26 @@ function addPerson() {
         </label>
     `;
 
-
-
     personBlock.innerHTML = `
+        <button type="button" class="btn-remove" onclick="removePerson(this)">삭제 ×</button>
 
-        <button type="button" class="btn-remove" onclick="removePerson(this)" 
-            style="position: absolute; top: 15px; right: 15px; background: #e74c3c; color: white; border: none; border-radius: 5px; padding: 5px 10px; cursor: pointer; font-weight: bold;">
-            삭제 ×
-        </button>
+        <p>이름: <input type="text" name="name[]" placeholder="홍길동" required minlength="2"></p>
+        <p class="help-text">이름은 2글자 이상 입력합니다.</p>
 
-        <p>이름: <input type="text" name="name[]" required></p>
-        <p>학과: <input type="text" name="Department[]" required></p>
-        <p>학번: <input type="text" name="StudentNumber[]" required></p>
-        <p>전화번호: <input type="text" name="phone[]" placeholder="010-1234-5678"></p>
-        
+        <p>학과: <input type="text" name="Department[]" placeholder="예: 통계학과" required></p>
+
+        <p>학번: <input type="text" name="StudentNumber[]" placeholder="숫자만 입력" pattern="[0-9]+" required></p>
+        <p class="help-text">학번은 숫자만 입력합니다.</p>
+
+        <p>전화번호: <input type="text" name="phone[]" placeholder="010-1234-5678" pattern="010-[0-9]{4}-[0-9]{4}" required></p>
+        <p class="help-text">전화번호 형식: 010-1234-5678</p>
+
         <p>이메일:</p>
         <div class="email-container">
             <input type="text" name="mail_id[]" placeholder="아이디" class="email-id" required>
             <span class="at-sign">@</span>
             <input type="text" name="mail_domain[]" placeholder="도메인" class="domain-input" readonly required>
-            <select class="domain-select" onchange="updateEmailDomain(this)">
+            <select class="domain-select" onchange="updateEmailDomain(this)" required>
                 <option value="" disabled selected>선택하세요</option>
                 <option value="gmail.com">gmail.com</option>
                 <option value="naver.com">naver.com</option>
@@ -84,64 +188,107 @@ function addPerson() {
             <div class="tech-grid">${techHtml}</div>
 
             <div class="etc-input-container" style="display:none; margin-top:10px;">
-                <input type="text" name="etc_stack[${personCount}]" placeholder="기타 기술 스택 입력 (쉼표로 구분)" 
-                    style="width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 5px;">
+                <input type="text" name="etc_stack[${personCount}]" placeholder="기타 기술 스택 입력, 쉼표로 구분">
             </div>
         </div>
     `;
-    
+
     container.appendChild(personBlock);
 }
 
-
-// 팀원 삭제 함수 (추가된 기능)
 function removePerson(button) {
-    if (confirm("이 팀원 입력 창을 삭제하시겠습니까?")) {
-        // 버튼에서 가장 가까운 부모 .person-block을 찾아 제거합니다.
+    if (confirm('이 팀원 입력 창을 삭제하시겠습니까?')) {
         const personBlock = button.closest('.person-block');
         personBlock.remove();
-        
-        // 중요: 중간 블록이 삭제되면 tech_stack[인덱스][]의 순서가 꼬일 수 있으므로 인덱스를 재정렬합니다.
         reindexTechStacks();
     }
 }
 
 function goBack() {
-    if (confirm("입력 중인 정보가 사라질 수 있습니다. 메인 화면으로 돌아가시겠습니까?")) {
+    if (confirm('입력 중인 정보가 사라질 수 있습니다. 메인 화면으로 돌아가시겠습니까?')) {
         location.href = '/';
     }
 }
 
 function toggleEtcInput(checkbox) {
-    // 체크박스가 포함된 tech-section 내에서 etc-input-container를 찾음
     const techSection = checkbox.closest('.tech-section');
     const container = techSection.querySelector('.etc-input-container');
+    const input = container.querySelector('input');
+
     if (checkbox.checked) {
         container.style.display = 'block';
-        container.querySelector('input').focus();
+        input.focus();
     } else {
         container.style.display = 'none';
-        container.querySelector('input').value = ''; // 체크 해제 시 내용 초기화
+        input.value = '';
     }
 }
 
-// 기술 스택 인덱스 재정렬 함수 (추가된 기능)
 function reindexTechStacks() {
-    const container = document.getElementById("personContainer");
-    const blocks = container.getElementsByClassName("person-block");
-    
-    // 남은 블록들을 순회하며 name 속성의 숫자를 0, 1, 2... 순서대로 다시 세팅합니다.
+    const container = document.getElementById('personContainer');
+    const blocks = container.getElementsByClassName('person-block');
+
     for (let i = 0; i < blocks.length; i++) {
-        // 일반 기술 스택 체크박스 재정렬
         const checkboxes = blocks[i].querySelectorAll('input[type="checkbox"]');
-        checkboxes.forEach(cb => {
+        checkboxes.forEach((cb) => {
             cb.name = `tech_stack[${i}][]`;
         });
-        
-        // 기타 기술 스택 입력창 재정렬
+
         const etcInput = blocks[i].querySelector('.etc-input-container input');
         if (etcInput) {
             etcInput.name = `etc_stack[${i}]`;
         }
     }
 }
+
+// ===============================
+// 공통 다크모드 + 현재 페이지 표시
+// ===============================
+
+document.addEventListener("DOMContentLoaded", function () {
+    const darkToggle = document.getElementById("globalDarkToggle");
+    const darkIcon = darkToggle ? darkToggle.querySelector("i") : null;
+    const darkText = darkToggle ? darkToggle.querySelector("span") : null;
+
+    // 저장된 다크모드 상태 적용
+    if (localStorage.getItem("theme") === "dark") {
+        document.body.classList.add("dark-mode");
+        if (darkIcon) darkIcon.className = "fa-solid fa-sun";
+        if (darkText) darkText.textContent = "Light";
+    }
+
+    // 다크모드 버튼 이벤트
+    if (darkToggle) {
+        darkToggle.addEventListener("click", function () {
+            document.body.classList.toggle("dark-mode");
+
+            const isDark = document.body.classList.contains("dark-mode");
+
+            localStorage.setItem("theme", isDark ? "dark" : "light");
+
+            if (darkIcon) {
+                darkIcon.className = isDark ? "fa-solid fa-sun" : "fa-solid fa-moon";
+            }
+
+            if (darkText) {
+                darkText.textContent = isDark ? "Light" : "Dark";
+            }
+        });
+    }
+
+    // 현재 페이지 nav active 처리
+    const currentPath = window.location.pathname;
+    const navLinks = document.querySelectorAll(".site-nav-menu .nav-link");
+
+    navLinks.forEach(link => {
+        const href = link.getAttribute("href");
+
+        if (href === currentPath) {
+            link.classList.add("active");
+        }
+
+        if (currentPath === "/" && href === "/") {
+            link.classList.add("active");
+        }
+    });
+});
