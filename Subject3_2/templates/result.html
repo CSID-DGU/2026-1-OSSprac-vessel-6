@@ -4,140 +4,163 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>팀원 정보 결과</title>
-    <link rel="stylesheet" href="../static/css/style.css">
-    <style>
-        :root {
-            --primary-color: #4a90e2;
-            --bg-color: #f4f7f6;
-            --card-bg: #ffffff;
-        }
-
-        body {
-            font-family: 'Pretendard', sans-serif;
-            background-color: var(--bg-color);
-            margin: 0;
-            padding: 40px 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        h1 {
-            color: #333;
-            margin-bottom: 30px;
-        }
-
-        .result-container {
-            width: 100%;
-            max-width: 800px;
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-
-        .member-card {
-            background: var(--card-bg);
-            border-radius: 15px;
-            padding: 25px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            border-left: 8px solid var(--primary-color);
-            transition: transform 0.2s;
-        }
-
-        .member-card:hover {
-            transform: translateY(-5px);
-        }
-
-        .member-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid #eee;
-            padding-bottom: 10px;
-            margin-bottom: 15px;
-        }
-
-        .member-name {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: #2c3e50;
-        }
-
-        .member-info p {
-            margin: 8px 0;
-            color: #555;
-            font-size: 1rem;
-        }
-
-        .info-label {
-            font-weight: 600;
-            color: #888;
-            width: 80px;
-            display: inline-block;
-        }
-
-        .tech-tags {
-            margin-top: 15px;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-        }
-
-        .tech-badge {
-            background: #eef2f7;
-            color: #4a90e2;
-            padding: 5px 12px;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            border: 1px solid #d1d9e6;
-        }
-
-        .btn-back {
-            margin-top: 40px;
-            padding: 12px 30px;
-            background-color: #2c3e50;
-            color: white;
-            text-decoration: none;
-            border-radius: 8px;
-            font-weight: bold;
-        }
-    </style>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 </head>
-<body>
+<body class="result-page">
 
-    <h1>📋 등록된 팀원 리스트</h1>
 
-    <div class="result-container">
-        <!-- Flask에서 넘겨준 members 리스트를 반복문으로 출력 -->
-        {% for member in members %}
-        <div class="member-card">
-            <div class="member-header">
-                <span class="member-name">{{ member.name }}</span>
-                <span style="color: #999;">{{ member.sn }}</span>
-            </div>
-            
-            <div class="member-info">
-                <p><span class="info-label">소속</span> {{ member.dept }}</p>
-                <p><span class="info-label">연락처</span> {{ member.phone }}</p>
-                <p><span class="info-label">이메일</span> {{ member.email }}</p>
-            </div>
+    <div class="page-shell">
 
-            <div class="tech-tags">
-                <!-- 선택된 기술 스택이 있다면 출력 -->
-                {% if member.techs %}
-                    {% for tech in member.techs %}
-                    <span class="tech-badge"># {{ tech }}</span>
-                    {% endfor %}
-                {% else %}
-                    <span style="color: #ccc; font-size: 0.9rem;">선택된 기술 스택 없음</span>
-                {% endif %}
-            </div>
+        <!-- 등록 완료 배너 -->
+<section class="result-success-v2 glass-card" data-aos="fade-up">
+    <div class="success-main">
+        <div class="success-icon-v2">
+            <i class="fa-solid fa-check"></i>
         </div>
-        {% endfor %}
+
+        <div class="success-text">
+            <span class="success-badge">
+                <i class="fa-solid fa-circle-check"></i>
+                SUBMIT COMPLETE
+            </span>
+
+            <h1>팀원 정보 등록이 완료되었습니다</h1>
+
+            <p>
+                입력한 팀원 정보가 정상적으로 제출되었습니다.
+                아래에서 등록된 정보를 확인하고, 검색 또는 기술 스택 필터를 이용해 원하는 팀원을 빠르게 찾을 수 있습니다.
+            </p>
+        </div>
     </div>
 
-    <a href="/" class="btn-back">다시 입력하기</a>
+    <div class="success-mini-info">
+        <div>
+            <span>등록 인원</span>
+            <strong>{{ members|length }}명</strong>
+        </div>
+
+        <div>
+            <span>검색</span>
+            <strong>가능</strong>
+        </div>
+
+        <div>
+            <span>필터</span>
+            <strong>적용</strong>
+        </div>
+    </div>
+</section>
+
+
+        <!-- 검색 / 필터 영역 -->
+        <section class="result-toolbar glass-card" data-aos="fade-up" data-aos-delay="100">
+            <div class="toolbar-title">
+                <h2>📋 입력된 팀원 리스트</h2>
+                <p>이름, 학과, 학번, 이메일, 기술 스택으로 검색할 수 있습니다.</p>
+            </div>
+
+            <div class="toolbar">
+                <input 
+                    type="text" 
+                    id="memberSearchInput" 
+                    class="search-input" 
+                    placeholder="이름, 학과, 학번, 이메일, 기술 스택으로 검색"
+                >
+
+                <div class="filter-bar">
+                    <button class="filter-btn active" type="button" data-filter="all">전체</button>
+                    <button class="filter-btn" type="button" data-filter="Python">Python</button>
+                    <button class="filter-btn" type="button" data-filter="JAVA">JAVA</button>
+                    <button class="filter-btn" type="button" data-filter="C++">C++</button>
+                    <button class="filter-btn" type="button" data-filter="Linux">Linux</button>
+                    <button class="filter-btn" type="button" data-filter="Git">Git</button>
+                    <button class="filter-btn" type="button" data-filter="Flask">Flask</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- 결과 카드 목록 -->
+        <div class="result-container" data-aos="fade-up" data-aos-delay="160">
+            {% for member in members %}
+            <div 
+                class="member-card" 
+                data-member-card 
+                data-tech="{{ member.techs | join(' ') }}"
+            >
+                <div class="card-accent-bar"></div>
+
+                <div class="card-content">
+                    <div class="member-header">
+                        <span class="member-name">{{ member.name }}</span>
+                        <span class="student-number">{{ member.sn }}</span>
+                    </div>
+
+                    <div class="member-info">
+                        <p>
+                            <span class="info-label">소속</span>
+                            {{ member.dept }}
+                        </p>
+
+                        <p>
+                            <span class="info-label">연락처</span>
+                            <a class="contact-link" href="tel:{{ member.phone | replace('-', '') }}">
+                                {{ member.phone }}
+                            </a>
+                        </p>
+
+                        <p>
+                            <span class="info-label">이메일</span>
+                            <a class="contact-link" href="mailto:{{ member.email }}">
+                                {{ member.email }}
+                            </a>
+                        </p>
+                    </div>
+
+                    <div class="tech-tags">
+                        {% if member.techs %}
+                            {% for tech in member.techs %}
+                            <span class="tech-badge"># {{ tech }}</span>
+                            {% endfor %}
+                        {% else %}
+                            <span class="no-tech">선택된 기술 스택 없음</span>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div id="emptyMessage" class="empty-message">
+            검색 조건에 맞는 입력 결과가 없습니다.
+        </div>
+
+        <!-- 하단 이동 버튼 -->
+        <div class="action-row">
+            <a href="/input" class="action-btn secondary">
+                <i class="fa-solid fa-pen"></i>
+                다시 입력하기
+            </a>
+
+            <a href="/contact" class="action-btn primary">
+                <i class="fa-solid fa-users"></i>
+                연락정보 보기
+            </a>
+
+            <a href="/" class="action-btn dark">
+                <i class="fa-solid fa-house"></i>
+                홈으로
+            </a>
+        </div>
+
+    </div>
+
+    <script src="{{ url_for('static', filename='js/theme.js') }}"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({ once: true });
+    </script>
 
 </body>
 </html>
