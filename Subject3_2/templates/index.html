@@ -37,7 +37,7 @@
 
             <div class="hero-stats">
                 <div>
-                    <strong>4</strong>
+                    <strong id="team-member-count">4</strong>
                     <span>Team Members</span>
                 </div>
 
@@ -261,7 +261,7 @@
                         <span>05</span>
                         <div>
                             <strong>Docker 배포</strong>
-                            <p>Dockerfile과 docker-compose.yml을 작성하여 컨테이너 실행 환경을 구성하였습니다.</p>
+                            <p>Dockerfile Forest와 docker-compose.yml을 작성하여 컨테이너 실행 환경을 구성하였습니다.</p>
                         </div>
                     </div>
                 </div>
@@ -418,28 +418,29 @@
                     ${eventsForDate.length > 2 ? `<span class="more-events">+${eventsForDate.length - 2}</span>` : ''}
                 </div>
             `;
-        dateCell.addEventListener('click', function () {
-            selectedDate = dateString;
-            selectedDateText.textContent = formatKoreanDate(selectedDate);
+            
+            dateCell.addEventListener('click', function () {
+                selectedDate = dateString;
+                selectedDateText.textContent = formatKoreanDate(selectedDate);
 
-            editingEventId = null;
+                editingEventId = null;
 
-            document.getElementById('eventTitle').value = '';
-            document.getElementById('eventTime').value = '';
-            document.getElementById('eventType').value = 'meeting';
-            document.getElementById('eventMember').value = '';
-            document.getElementById('eventMemo').value = '';
+                document.getElementById('eventTitle').value = '';
+                document.getElementById('eventTime').value = '';
+                document.getElementById('eventType').value = 'meeting';
+                document.getElementById('eventMember').value = '';
+                document.getElementById('eventMemo').value = '';
 
-            document.querySelector('.calendar-submit-btn').textContent = '선택한 날짜에 일정 등록';
+                document.querySelector('.calendar-submit-btn').textContent = '선택한 날짜에 일정 등록';
 
-            const formTitle = document.getElementById('eventFormTitle');
-            if (formTitle) {
-                formTitle.textContent = '일정 추가';
-            }
+                const formTitle = document.getElementById('eventFormTitle');
+                if (formTitle) {
+                    formTitle.textContent = '일정 추가';
+                }
 
-            renderCalendar();
-            renderSelectedDateEvents();
-        });
+                renderCalendar();
+                renderSelectedDateEvents();
+            });
 
             return dateCell;
         }
@@ -655,7 +656,35 @@
             return div.innerHTML;
         }
 
-        loadEvents();
+        // [확인] 실시간 팀원 수를 세어오는 핵심 비동기 함수
+        async function loadMemberCount() {
+            try {
+                // 주소 뒤에 ?t=시간값을 붙여 브라우저가 옛날 데이터를 캐싱하지 못하게 강제합니다.
+                const timestamp = new Date().getTime();
+                const response = await fetch(`/api/member-count?t=${timestamp}`);
+                
+                if (!response.ok) {
+                    console.error('서버 응답 에러 상태:', response.status);
+                    return;
+                }
+                
+                const data = await response.json();
+                console.log('서버에서 받아온 총 팀원 수 데이터:', data); // 콘솔에서 확인용
+                
+                const countElement = document.getElementById('team-member-count');
+                if (countElement && data.count !== undefined) {
+                    countElement.textContent = data.count;
+                }
+            } catch (error) {
+                console.error('JS에서 팀원 수 데이터를 가져오는데 실패했습니다:', error);
+            }
+        }
+
+        // 페이지가 완전히 로드되면 실행부 작동
+        document.addEventListener('DOMContentLoaded', function() {
+            loadEvents();       // 기존 캘린더 로드
+            loadMemberCount();  // 신규 팀원 수 로드
+        });
     </script>
 </body>
 </html>
