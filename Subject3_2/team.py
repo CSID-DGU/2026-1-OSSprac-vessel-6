@@ -1,65 +1,159 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, jsonify
 
 app = Flask(__name__)
-saved_members = []
-'''
-index -> input -> result 순서로 진행하기 위해 기존 코드를 주석처리 하였습니다.
-@app.route('/')
-def input_page():
-    # 사용자가 작성한 input.html 파일을 렌더링합니다.
-    return render_template('input.html')
-'''
-@app.route('/') # 1. index
+
+# 고정 팀원 정보: 서버를 껐다 켜도 바뀌지 않는 소개용 데이터입니다.
+TEAM_MEMBERS = [
+    {
+        "name": "김태형",
+        "dept": "통계학과",
+        "phone": "010-9995-1234",
+        "email": "teahyung@gmail.com",
+        "role": "Team Leader / result.html 담당, 입력 정보를 결과 페이지에 출력하고 전체 웹사이트를 검토함.",
+        "techs": ["Python", "Flask", "R", "GitHub", "JAVA", "SAS", "Linux"],
+        "leader": True,
+    },
+    {
+        "name": "권민재",
+        "dept": "정보통신공학과",
+        "phone": "010-6292-1234",
+        "email": "minjae1234@gmail.com",
+        "role": "input.html 담당, 팀원 정보 입력 폼과 기술 스택 선택 기능을 구현함.",
+        "techs": ["C++", "JAVA", "Linux"],
+        "leader": False,
+    },
+    {
+        "name": "김종헌",
+        "dept": "정보통신공학과",
+        "phone": "010-2657-9037",
+        "email": "jongheon371@gmail.com",
+        "role": "contact.html 담당, 팀원 연락처 페이지와 카드형 UI를 구현함.",
+        "techs": ["C++", "Python"],
+        "leader": False,
+    },
+    {
+        "name": "이영민",
+        "dept": "건축학과",
+        "phone": "010-8838-0140",
+        "email": "lymin0106@gmail.com",
+        "role": "index.html 담당, 팀 소개와 프로젝트 개요를 담은 메인 페이지를 구현함.",
+        "techs": ["Python", "JAVA"],
+        "leader": False,
+    },
+]
+team_events = []
+
+@app.route("/")
 def main():
-    return render_template('index.html')
+    return render_template("index.html")
 
-@app.route('/input') # 2. input
+
+@app.route("/input")
 def input_page():
-    return render_template('input.html')
+    return render_template("input.html")
 
-@app.route('/contact')
+
+@app.route("/contact")
 def contact():
-    return render_template('contact.html', members=saved_members)
+    return render_template("contact.html", members=TEAM_MEMBERS)
 
-@app.route('/result', methods=['POST']) # 3. result
+
+@app.route("/result", methods=["POST"])
 def result():
-    # 1. 일반 필드 리스트 가져오기
-    names = request.form.getlist('name[]')
-    departments = request.form.getlist('Department[]')
-    student_numbers = request.form.getlist('StudentNumber[]')
-    phones = request.form.getlist('phone[]')
-    mail_ids = request.form.getlist('mail_id[]')
-    mail_domains = request.form.getlist('mail_domain[]')
+    names = request.form.getlist("name[]")
+    departments = request.form.getlist("Department[]")
+    student_numbers = request.form.getlist("StudentNumber[]")
+    phones = request.form.getlist("phone[]")
+    mail_ids = request.form.getlist("mail_id[]")
+    mail_domains = request.form.getlist("mail_domain[]")
 
-    # 2. 팀원별 데이터를 딕셔너리 리스트로 재구성
-    team_members = []
+    submitted_members = []
+
     for i in range(len(names)):
-        # 기술 스택은 tech_stack[0][], tech_stack[1][] 형태로 들어오므로 인덱스로 접근
-        techs = request.form.getlist(f'tech_stack[{i}][]')
-        
-        if 'etc' in techs:
-            techs.remove('etc') # 'etc'라는 글자 자체는 제거
-            etc_val = request.form.get(f'etc_stack[{i}]')
+        techs = request.form.getlist(f"tech_stack[{i}][]")
+
+        if "etc" in techs:
+            techs.remove("etc")
+            etc_val = request.form.get(f"etc_stack[{i}]")
             if etc_val:
-                # 쉼표로 구분해서 입력했을 경우를 대비해 분리하여 추가
-                etc_list = [t.strip() for t in etc_val.split(',') if t.strip()]
+                etc_list = [t.strip() for t in etc_val.split(",") if t.strip()]
                 techs.extend(etc_list)
-        
-        member = {
-            'name': names[i],
-            'dept': departments[i],
-            'sn': student_numbers[i],
-            'phone': phones[i],
-            'email': f"{mail_ids[i]}@{mail_domains[i]}",
-            'techs': techs
-        }
-        team_members.append(member)
 
-    # 3. 완성된 데이터를 result.html로 전달
+        submitted_members.append(
+            {
+                "name": names[i],
+                "dept": departments[i],
+                "sn": student_numbers[i],
+                "phone": phones[i],
+                "email": f"{mail_ids[i]}@{mail_domains[i]}",
+                "techs": techs,
+            }
+        )
 
-    saved_members.extend(team_members)
+    return render_template("result.html", members=submitted_members)
 
-    return render_template('result.html', members=team_members)
+@app.route('/api/events', methods=['GET'])
+def get_events():
+    return jsonify(team_events)
 
-if __name__ == '__main__':
-    app.run(debug=True, port=5000)
+
+@app.route('/api/events', methods=['POST'])
+def add_event():
+    data = request.get_json()
+
+    title = data.get('title')
+    date = data.get('date')
+    time = data.get('time')
+    member = data.get('member')
+    memo = data.get('memo')
+    event_type = data.get('type', 'meeting')
+
+    if not title or not date:
+        return jsonify({'error': '일정 제목과 날짜는 필수입니다.'}), 400
+
+    event = {
+        'id': len(team_events) + 1,
+        'title': title,
+        'date': date,
+        'time': time,
+        'member': member,
+        'memo': memo,
+        'type': event_type
+    }
+
+    team_events.append(event)
+
+    return jsonify(event), 201
+
+
+@app.route('/api/events/<int:event_id>', methods=['DELETE'])
+def delete_event(event_id):
+    global team_events
+
+    before_count = len(team_events)
+    team_events = [event for event in team_events if event['id'] != event_id]
+
+    if len(team_events) == before_count:
+        return jsonify({'error': '해당 일정을 찾을 수 없습니다.'}), 404
+
+    return jsonify({'message': '일정이 삭제되었습니다.'})
+
+@app.route('/api/events/<int:event_id>', methods=['PUT'])
+def update_event(event_id):
+    data = request.get_json()
+
+    for event in team_events:
+        if event['id'] == event_id:
+            event['title'] = data.get('title', event['title'])
+            event['date'] = data.get('date', event['date'])
+            event['time'] = data.get('time', event.get('time', ''))
+            event['type'] = data.get('type', event.get('type', 'meeting'))
+            event['member'] = data.get('member', event.get('member', ''))
+            event['memo'] = data.get('memo', event.get('memo', ''))
+            return jsonify(event)
+
+    return jsonify({'error': 'Event not found'}), 404
+
+if __name__ == "__main__":
+    # Docker 컨테이너 외부에서 접속 가능하도록 host='0.0.0.0' 설정
+    app.run(host="0.0.0.0", debug=True, port=5000)
